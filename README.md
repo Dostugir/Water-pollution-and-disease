@@ -82,9 +82,12 @@ Water-pollution-and-disease/
 ├── requirements.txt       # Python dependencies
 └── README.md             # Project documentation
 ```
-Screenshot 2025-05-03 235220.png
-Screenshot 2025-05-03 235048.png
-Screenshot 2025-05-03 235012.png
+![Screenshot 2025-05-03 235012](https://github.com/user-attachments/assets/97e37035-c190-41fc-b562-f35a99cbd884)
+
+![Screenshot 2025-05-03 235048](https://github.com/user-attachments/assets/e1c1e33f-d216-49ba-b62a-618011f09713)
+
+![Screenshot 2025-05-03 235220](https://github.com/user-attachments/assets/6987d450-dbad-40f8-bccb-fa4156b9be4d)
+
 
 ## Contributing
 
