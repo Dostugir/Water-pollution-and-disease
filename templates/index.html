@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Prediction System</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            flex: 1 1 150px;
+            margin: 0 10px 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-info {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #1976D2;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .form-group {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Water Quality Prediction System</h1>
+        
+        <form id="predictionForm" action="/predict" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ph">pH Level</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="ph" id="ph" required 
+                               placeholder="pH (0-14)" step="0.01" min="0" max="14">
+                    </div>
+                    <div class="input-info">Range: 6.5-8.5</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="turbidity">Turbidity (NTU)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="turbidity" id="turbidity" required 
+                               placeholder="Turbidity" step="0.01" min="0">
+                    </div>
+                    <div class="input-info">WHO: &lt;1 NTU</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nitrate">Nitrate (mg/L)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="nitrate" id="nitrate" required 
+                               placeholder="Nitrate" step="0.01" min="0">
+                    </div>
+                    <div class="input-info">WHO: &lt;10 mg/L</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lead">Lead (µg/L)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="lead" id="lead" required 
+                               placeholder="Lead" step="0.01" min="0">
+                    </div>
+                    <div class="input-info">WHO: &lt;10 µg/L</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="oxygen">Dissolved O₂ (mg/L)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="oxygen" id="oxygen" required 
+                               placeholder="Oxygen" step="0.01" min="0">
+                    </div>
+                    <div class="input-info">WHO: &gt;5 mg/L</div>
+                </div>
+            </div>
+
+            <button type="submit">Predict Water Quality</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing water quality...</p>
+        </div>
+
+        {% if prediction_text %}
+        <div class="result {% if 'Error' in prediction_text %}error{% else %}success{% endif %}">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            // Validate all inputs before submission
+            const inputs = document.querySelectorAll('input[type="number"]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                const value = input.value.trim();
+                if (value === '') {
+                    isValid = false;
+                    input.style.borderColor = 'red';
+                } else if (isNaN(parseFloat(value))) {
+                    isValid = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please enter valid numeric values for all fields');
+                return;
+            }
+            
+            // pH specific validation
+            const phValue = parseFloat(document.getElementById('ph').value);
+            if (phValue < 0 || phValue > 14) {
+                e.preventDefault();
+                alert('pH must be between 0 and 14');
+                document.getElementById('ph').style.borderColor = 'red';
+                return;
+            }
+            
+            // Show loading spinner if all validations pass
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        });
+
+        // Reset border color when user starts typing
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+            });
+        });
+    </script>
+</body>
+</html> 
